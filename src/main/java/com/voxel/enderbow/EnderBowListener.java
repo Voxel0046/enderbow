@@ -2,12 +2,15 @@ package com.voxel.enderbow;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.ItemFlag;
@@ -30,6 +33,7 @@ public class EnderBowListener implements Listener {
     private ItemStack configuredBow;
     private final NamespacedKey key;
     private final Map<UUID, Long> cooldowns = new ConcurrentHashMap<>();
+    private final Map<Integer, UUID> pearls = new ConcurrentHashMap<>(); // Track pearl entity IDs to their shooter
 
     public EnderBowListener(EnderBowPlugin plugin) {
         this.plugin = plugin;
@@ -144,8 +148,93 @@ public class EnderBowListener implements Listener {
         pearl.setShooter(player);
         pearl.setVelocity(velocity);
 
+        // Track pearl for effects on teleport
+        pearls.put(pearl.getEntityId(), player.getUniqueId());
+
+        // Play throw effects
+        playThrowEffects(player);
+
         // cancel original shoot event to avoid arrow consumption visuals
         event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onProjectileHit(ProjectileHitEvent event) {
+        if (!(event.getEntity() instanceof EnderPearl)) return;
+
+        EnderPearl pearl = (EnderPearl) event.getEntity();
+        UUID shooterUUID = pearls.remove(pearl.getEntityId());
+
+        if (shooterUUID != null) {
+            Player shooter = org.bukkit.Bukkit.getPlayer(shooterUUID);
+            if (shooter != null) {
+                playTeleportEffects(pearl.getLocation());
+            }
+        }
+    }
+
+    private void playThrowEffects(Player player) {
+        EnderBowConfig cfg = plugin.getEbConfig();
+        EnderBowConfig.EffectsConfig effects = cfg.getEffectsConfig();
+
+        // Play throw sound
+        if (effects.getThrowSound().isEnabled()) {
+            try {
+                Sound sound = Sound.valueOf(effects.getThrowSound().getSound());
+                player.getWorld().playSound(player.getEyeLocation(), sound, effects.getThrowSound().getVolume(), effects.getThrowSound().getPitch());
+            } catch (IllegalArgumentException e) {
+                plugin.getLogger().warning("Invalid throw sound: " + effects.getThrowSound().getSound());
+            }
+        }
+
+        // Play throw particles
+        if (effects.getThrowParticles().isEnabled()) {
+            try {
+                Particle particle = Particle.valueOf(effects.getThrowParticles().getParticle());
+                player.getWorld().spawnParticle(
+                    particle,
+                    player.getEyeLocation(),
+                    effects.getThrowParticles().getCount(),
+                    effects.getThrowParticles().getOffsetX(),
+                    effects.getThrowParticles().getOffsetY(),
+                    effects.getThrowParticles().getOffsetZ()
+                );
+            } catch (IllegalArgumentException e) {
+                plugin.getLogger().warning("Invalid throw particle: " + effects.getThrowParticles().getParticle());
+            }
+        }
+    }
+
+    private void playTeleportEffects(org.bukkit.Location location) {
+        EnderBowConfig cfg = plugin.getEbConfig();
+        EnderBowConfig.EffectsConfig effects = cfg.getEffectsConfig();
+
+        // Play teleport sound
+        if (effects.getTeleportSound().isEnabled()) {
+            try {
+                Sound sound = Sound.valueOf(effects.getTeleportSound().getSound());
+                location.getWorld().playSound(location, sound, effects.getTeleportSound().getVolume(), effects.getTeleportSound().getPitch());
+            } catch (IllegalArgumentException e) {
+                plugin.getLogger().warning("Invalid teleport sound: " + effects.getTeleportSound().getSound());
+            }
+        }
+
+        // Play teleport particles
+        if (effects.getTeleportParticles().isEnabled()) {
+            try {
+                Particle particle = Particle.valueOf(effects.getTeleportParticles().getParticle());
+                location.getWorld().spawnParticle(
+                    particle,
+                    location,
+                    effects.getTeleportParticles().getCount(),
+                    effects.getTeleportParticles().getOffsetX(),
+                    effects.getTeleportParticles().getOffsetY(),
+                    effects.getTeleportParticles().getOffsetZ()
+                );
+            } catch (IllegalArgumentException e) {
+                plugin.getLogger().warning("Invalid teleport particle: " + effects.getTeleportParticles().getParticle());
+            }
+        }
     }
 
     @EventHandler
