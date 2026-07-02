@@ -1,0 +1,13 @@
+name: EnderBow
+main: com.voxel.enderbow.EnderBowPlugin
+version: 1.0.0
+api-version: "1.21"
+description: Allows a hub bow to shoot ender pearls instead of arrows (configurable).
+commands:
+  enderbow:
+    description: EnderBow admin command
+    usage: /enderbow reload
+permissions:
+  enderbow.reload:
+    description: Reload EnderBow config
+    default: op
