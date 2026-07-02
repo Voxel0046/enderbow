@@ -16,15 +16,7 @@ Features
 - /enderbow give <player> to give the bow to a player
 - Permission enderbow.bypass to skip cooldowns
 
-Build
-- Requirements: Java 17+, Maven
-- Build: mvn clean package
-- Drop the generated JAR from target/ into your server's plugins/ folder
-
 Permissions
 - enderbow.reload (default: op)
 - enderbow.give (default: op)
 - enderbow.bypass (default: false)
-
-License
-MIT (see LICENSE file)
