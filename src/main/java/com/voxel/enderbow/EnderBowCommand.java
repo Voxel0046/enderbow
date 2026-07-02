@@ -1,7 +1,6 @@
 package com.voxel.enderbow;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -24,33 +23,33 @@ public class EnderBowCommand implements CommandExecutor, TabCompleter {
         if (args.length >= 1) {
             if (args[0].equalsIgnoreCase("reload")) {
                 if (!sender.hasPermission("enderbow.reload")) {
-                    sender.sendMessage(ChatColor.RED + "No permission.");
+                    sender.sendMessage("§cNo permission.");
                     return true;
                 }
                 plugin.reloadEbConfig();
-                sender.sendMessage(ChatColor.GREEN + "EnderBow config reloaded. Name and lore updated.");
+                sender.sendMessage("§aEnderBow config reloaded. Name and lore updated.");
                 return true;
             }
             if (args[0].equalsIgnoreCase("give")) {
                 if (!sender.hasPermission("enderbow.give")) {
-                    sender.sendMessage(ChatColor.RED + "No permission.");
+                    sender.sendMessage("§cNo permission.");
                     return true;
                 }
                 if (args.length < 2) {
-                    sender.sendMessage(ChatColor.YELLOW + "Usage: /enderbow give <player>");
+                    sender.sendMessage("§eUsage: /enderbow give <player>");
                     return true;
                 }
                 Player target = Bukkit.getPlayerExact(args[1]);
                 if (target == null) {
-                    sender.sendMessage(ChatColor.RED + "Player not found or not online: " + args[1]);
+                    sender.sendMessage("§cPlayer not found or not online: " + args[1]);
                     return true;
                 }
                 plugin.giveBowTo(target);
-                sender.sendMessage(ChatColor.GREEN + "Gave EnderBow to " + target.getName());
+                sender.sendMessage("§aGave EnderBow to " + target.getName());
                 return true;
             }
         }
-        sender.sendMessage(ChatColor.YELLOW + "EnderBow plugin. Use /enderbow reload or /enderbow give <player>");
+        sender.sendMessage("§eEnderBow plugin. Use /enderbow reload or /enderbow give <player>");
         return true;
     }
 
