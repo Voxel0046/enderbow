@@ -25,8 +25,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.bukkit.ChatColor;
-
 public class EnderBowListener implements Listener {
 
     private final EnderBowPlugin plugin;
@@ -108,7 +106,7 @@ public class EnderBowListener implements Listener {
                     // still on cooldown: cancel the shot and optionally notify
                     event.setCancelled(true);
                     long remaining = (cooldownMillis - (now - last) + 999) / 1000;
-                    String msg = ChatColor.RED + "EnderBow is on cooldown for " + remaining + "s.";
+                    String msg = "§cEnderBow is on cooldown for " + remaining + "s.";
                     if (plugin.getEbConfig().isActionbarCooldownMessage()) {
                         // send as action bar
                         try {
