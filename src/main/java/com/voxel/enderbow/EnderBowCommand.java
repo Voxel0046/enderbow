@@ -1,13 +1,17 @@
 package com.voxel.enderbow;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.bukkit.Bukkit;
 
-public class EnderBowCommand implements CommandExecutor {
+import java.util.ArrayList;
+import java.util.List;
+
+public class EnderBowCommand implements CommandExecutor, TabCompleter {
 
     private final EnderBowPlugin plugin;
 
@@ -24,7 +28,7 @@ public class EnderBowCommand implements CommandExecutor {
                     return true;
                 }
                 plugin.reloadEbConfig();
-                sender.sendMessage(ChatColor.GREEN + "EnderBow config reloaded.");
+                sender.sendMessage(ChatColor.GREEN + "EnderBow config reloaded. Name and lore updated.");
                 return true;
             }
             if (args[0].equalsIgnoreCase("give")) {
@@ -48,5 +52,36 @@ public class EnderBowCommand implements CommandExecutor {
         }
         sender.sendMessage(ChatColor.YELLOW + "EnderBow plugin. Use /enderbow reload or /enderbow give <player>");
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        List<String> completions = new ArrayList<>();
+
+        if (args.length == 1) {
+            // Complete first argument (subcommands)
+            if (sender.hasPermission("enderbow.reload")) {
+                completions.add("reload");
+            }
+            if (sender.hasPermission("enderbow.give")) {
+                completions.add("give");
+            }
+            return completions;
+        }
+
+        if (args.length == 2 && args[0].equalsIgnoreCase("give")) {
+            // Complete player names for give command
+            if (sender.hasPermission("enderbow.give")) {
+                String partialName = args[1].toLowerCase();
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    if (player.getName().toLowerCase().startsWith(partialName)) {
+                        completions.add(player.getName());
+                    }
+                }
+            }
+            return completions;
+        }
+
+        return completions;
     }
 }
