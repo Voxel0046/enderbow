@@ -25,7 +25,9 @@ public final class EnderBowPlugin extends JavaPlugin {
         listener = new EnderBowListener(this);
         Bukkit.getPluginManager().registerEvents(listener, this);
 
-        getCommand("enderbow").setExecutor(new EnderBowCommand(this));
+        EnderBowCommand commandExecutor = new EnderBowCommand(this);
+        getCommand("enderbow").setExecutor(commandExecutor);
+        getCommand("enderbow").setTabCompleter(commandExecutor);
 
         reloadEbConfig();
 
