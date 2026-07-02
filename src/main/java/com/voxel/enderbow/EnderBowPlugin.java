@@ -21,15 +21,16 @@ public final class EnderBowPlugin extends JavaPlugin {
             setupMetrics();
         }
 
-        // create listener early so reloadEbConfig can re-give items safely
+        // Load config first
+        reloadEbConfig();
+
+        // create listener after config is loaded
         listener = new EnderBowListener(this);
         Bukkit.getPluginManager().registerEvents(listener, this);
 
         EnderBowCommand commandExecutor = new EnderBowCommand(this);
         getCommand("enderbow").setExecutor(commandExecutor);
         getCommand("enderbow").setTabCompleter(commandExecutor);
-
-        reloadEbConfig();
 
         getLogger().info("EnderBow enabled");
     }
