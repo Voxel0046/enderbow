@@ -28,3 +28,47 @@ vertical-multiplier: 1.0
 
 # actionbar-cooldown-message: if true, cooldown message will be sent as an action bar (fallbacks to chat if unsupported)
 actionbar-cooldown-message: true
+
+# Sound and particle effects on pearl throw
+effects:
+  # Enable sound effects on pearl throw
+  throw-sound:
+    enabled: true
+    # Sound name (e.g., ENTITY_ENDER_PEARL_THROW, ENTITY_ENDERMAN_TELEPORT)
+    sound: "ENTITY_ENDER_PEARL_THROW"
+    # Volume (0.0 - max)
+    volume: 1.0
+    # Pitch (0.5 - 2.0)
+    pitch: 1.0
+  
+  # Enable particle effects on pearl throw
+  throw-particles:
+    enabled: true
+    # Particle type (e.g., PORTAL, SMALL_FLAME, FALLING_DUST)
+    particle: "PORTAL"
+    # Number of particles to spawn
+    count: 8
+    # Offset for particle spread
+    offset-x: 0.3
+    offset-y: 0.3
+    offset-z: 0.3
+  
+  # Enable sound effects on pearl teleport/land
+  teleport-sound:
+    enabled: true
+    sound: "ENTITY_ENDERMAN_TELEPORT"
+    volume: 1.0
+    pitch: 1.0
+  
+  # Enable particle effects on pearl teleport/land
+  teleport-particles:
+    enabled: true
+    particle: "PORTAL"
+    count: 16
+    offset-x: 0.5
+    offset-y: 0.5
+    offset-z: 0.5
+
+# bStats metrics reporting (anonymized data collection)
+metrics:
+  enabled: true
