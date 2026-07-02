@@ -22,6 +22,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.bukkit.ChatColor;
+
 public class EnderBowListener implements Listener {
 
     private final EnderBowPlugin plugin;
@@ -98,7 +100,18 @@ public class EnderBowListener implements Listener {
                 // still on cooldown: cancel the shot and optionally notify
                 event.setCancelled(true);
                 long remaining = (cooldownMillis - (now - last) + 999) / 1000;
-                player.sendMessage(org.bukkit.ChatColor.RED + "EnderBow is on cooldown for " + remaining + "s.");
+                String msg = ChatColor.RED + "EnderBow is on cooldown for " + remaining + "s.";
+                if (plugin.getEbConfig().isActionbarCooldownMessage()) {
+                    // send as action bar
+                    try {
+                        player.sendActionBar(msg);
+                    } catch (NoSuchMethodError | NoClassDefFoundError ex) {
+                        // fallback
+                        player.sendMessage(msg);
+                    }
+                } else {
+                    player.sendMessage(msg);
+                }
                 return;
             }
             // record use
@@ -111,7 +124,8 @@ public class EnderBowListener implements Listener {
         }
         // calculate velocity from force and player's eye direction as fallback
         float force = event.getForce(); // 0..1
-        Vector velocity = player.getEyeLocation().getDirection().multiply(Math.max(1.0, force * 2.0));
+        double multiplier = plugin.getEbConfig().getVelocityMultiplier();
+        Vector velocity = player.getEyeLocation().getDirection().multiply(Math.max(1.0, force * 2.0) * multiplier);
 
         EnderPearl pearl = (EnderPearl) player.getWorld().spawnEntity(player.getEyeLocation(), EntityType.ENDER_PEARL);
         pearl.setShooter(player);

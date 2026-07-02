@@ -1,8 +1,8 @@
 # EnderBow configuration
-# name: display name of the custom bow (supports & color codes)
+# name: display name of the custom bow (supports & color codes and #rrggbb hex codes)
 name: "&5Ender Bow"
 
-# lore: list of lore lines (supports & color codes)
+# lore: list of lore lines (supports & color codes and #rrggbb hex codes)
 lore:
   - "&7Shoot an ender pearl instead of an arrow"
   - "&eNo pearls required"
@@ -18,3 +18,9 @@ cooldown-seconds: 2.0
 
 # unbreakable: if true, the custom bow will not take durability damage
 unbreakable: true
+
+# velocity-multiplier: multiplies the spawned ender pearl velocity (default 1.0)
+velocity-multiplier: 1.0
+
+# actionbar-cooldown-message: if true, cooldown message will be sent as an action bar (fallbacks to chat if unsupported)
+actionbar-cooldown-message: true

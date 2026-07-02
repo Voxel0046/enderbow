@@ -32,14 +32,18 @@ public final class EnderBowPlugin extends JavaPlugin {
     public void reloadEbConfig() {
         reloadConfig();
         FileConfiguration cfg = getConfig();
+        String name = cfg.getString("name", "&5Ender Bow");
+        java.util.List<String> lore = cfg.getStringList("lore");
+
         ebConfig = new EnderBowConfig(
-            org.bukkit.ChatColor.translateAlternateColorCodes('&', cfg.getString("name", "&5Ender Bow")),
-            cfg.getStringList("lore").stream()
-                    .map(s -> org.bukkit.ChatColor.translateAlternateColorCodes('&', s)).toList(),
+            ColorUtils.color(name),
+            ColorUtils.colorList(lore),
             Math.max(0, Math.min(8, cfg.getInt("slot", 4))),
             cfg.getBoolean("give-on-join", true),
             Math.max(0.0, cfg.getDouble("cooldown-seconds", 2.0)),
-            cfg.getBoolean("unbreakable", true)
+            cfg.getBoolean("unbreakable", true),
+            Math.max(0.0, cfg.getDouble("velocity-multiplier", 1.0)),
+            cfg.getBoolean("actionbar-cooldown-message", true)
         );
 
         // refresh listener's internal bow and re-give to online players if configured
