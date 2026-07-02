@@ -22,5 +22,9 @@ unbreakable: true
 # velocity-multiplier: multiplies the spawned ender pearl velocity (default 1.0)
 velocity-multiplier: 1.0
 
+# separate multipliers for forward (xz) and vertical (y) components
+forward-multiplier: 1.0
+vertical-multiplier: 1.0
+
 # actionbar-cooldown-message: if true, cooldown message will be sent as an action bar (fallbacks to chat if unsupported)
 actionbar-cooldown-message: true

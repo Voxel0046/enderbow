@@ -9,9 +9,12 @@ Features
 - Per-player cooldown to prevent spam
 - Optionally makes the bow unbreakable and prevents durability loss
 - Configurable velocity multiplier for ender pearls
+- Separate forward and vertical multipliers for velocity
 - Action bar cooldown message (toggleable)
 - Hex color support (#rrggbb) and & color codes
 - /enderbow reload to reload config and re-give to online players
+- /enderbow give <player> to give the bow to a player
+- Permission enderbow.bypass to skip cooldowns
 
 Build
 - Requirements: Java 17+, Maven
@@ -27,10 +30,14 @@ Edit src/main/resources/config.yml (or plugins/EnderBow/config.yml after first r
 - cooldown-seconds: cooldown between uses
 - unbreakable: make the bow unbreakable
 - velocity-multiplier: multiply pearl speed
+- forward-multiplier: multiplier for forward (XZ) components
+- vertical-multiplier: multiplier for vertical (Y) component
 - actionbar-cooldown-message: toggle actionbar cooldown message
 
 Permissions
 - enderbow.reload (default: op)
+- enderbow.give (default: op)
+- enderbow.bypass (default: false)
 
 License
 MIT (see LICENSE file)

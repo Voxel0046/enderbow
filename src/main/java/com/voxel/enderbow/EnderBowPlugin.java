@@ -43,7 +43,9 @@ public final class EnderBowPlugin extends JavaPlugin {
             Math.max(0.0, cfg.getDouble("cooldown-seconds", 2.0)),
             cfg.getBoolean("unbreakable", true),
             Math.max(0.0, cfg.getDouble("velocity-multiplier", 1.0)),
-            cfg.getBoolean("actionbar-cooldown-message", true)
+            cfg.getBoolean("actionbar-cooldown-message", true),
+            Math.max(0.0, cfg.getDouble("forward-multiplier", 1.0)),
+            Math.max(0.0, cfg.getDouble("vertical-multiplier", 1.0))
         );
 
         // refresh listener's internal bow and re-give to online players if configured
@@ -57,5 +59,9 @@ public final class EnderBowPlugin extends JavaPlugin {
 
     public EnderBowConfig getEbConfig() {
         return ebConfig;
+    }
+
+    public void giveBowTo(org.bukkit.entity.Player player) {
+        if (listener != null) listener.giveBowTo(player);
     }
 }

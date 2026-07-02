@@ -6,8 +6,14 @@ description: Allows a hub bow to shoot ender pearls instead of arrows (configura
 commands:
   enderbow:
     description: EnderBow admin command
-    usage: /enderbow reload
+    usage: /enderbow <reload|give>
 permissions:
   enderbow.reload:
     description: Reload EnderBow config
     default: op
+  enderbow.give:
+    description: Give a player the EnderBow
+    default: op
+  enderbow.bypass:
+    description: Bypass EnderBow cooldown
+    default: false
