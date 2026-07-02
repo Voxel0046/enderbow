@@ -5,15 +5,13 @@ import java.util.stream.Collectors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.bukkit.ChatColor;
-
 public final class ColorUtils {
     private static final Pattern HEX = Pattern.compile("(?i)#([0-9a-f]{6})");
 
     public static String color(String input) {
         if (input == null) return null;
-        // translate & codes first
-        String translated = ChatColor.translateAlternateColorCodes('&', input);
+        // translate & codes first using legacy hex conversion
+        String translated = translateAlternateColorCodes('&', input);
         // replace #rrggbb with a hex color in a way that's compatible with older/newer APIs
         Matcher matcher = HEX.matcher(translated);
         StringBuffer sb = new StringBuffer();
@@ -41,6 +39,17 @@ public final class ColorUtils {
         }
         matcher.appendTail(sb);
         return sb.toString();
+    }
+
+    private static String translateAlternateColorCodes(char altColorChar, String textToTranslate) {
+        char[] b = textToTranslate.toCharArray();
+        for (int i = 0; i < b.length - 1; i++) {
+            if (b[i] == altColorChar && "0123456789AaBbCcDdEeFfKkLlMmNnOoRr".indexOf(b[i + 1]) > -1) {
+                b[i] = '\u00A7';
+                b[i + 1] = Character.toLowerCase(b[i + 1]);
+            }
+        }
+        return new String(b);
     }
 
     private static String hexToLegacy(String hex) {
