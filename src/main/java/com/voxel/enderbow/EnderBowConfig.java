@@ -10,13 +10,14 @@ public class EnderBowConfig {
     private final double cooldownSeconds;
     private final boolean unbreakable;
     private final double velocityMultiplier;
+    private final String cooldownMessage;
     private final boolean actionbarCooldownMessage;
     private final double forwardMultiplier;
     private final double verticalMultiplier;
     private final EffectsConfig effectsConfig;
     private final boolean metricsEnabled;
 
-    public EnderBowConfig(String displayName, List<String> lore, int slot, boolean giveOnJoin, double cooldownSeconds, boolean unbreakable, double velocityMultiplier, boolean actionbarCooldownMessage, double forwardMultiplier, double verticalMultiplier, EffectsConfig effectsConfig, boolean metricsEnabled) {
+    public EnderBowConfig(String displayName, List<String> lore, int slot, boolean giveOnJoin, double cooldownSeconds, boolean unbreakable, double velocityMultiplier, String cooldownMessage, boolean actionbarCooldownMessage, double forwardMultiplier, double verticalMultiplier, EffectsConfig effectsConfig, boolean metricsEnabled) {
         this.displayName = displayName;
         this.lore = lore;
         this.slot = slot;
@@ -24,6 +25,7 @@ public class EnderBowConfig {
         this.cooldownSeconds = cooldownSeconds;
         this.unbreakable = unbreakable;
         this.velocityMultiplier = velocityMultiplier;
+        this.cooldownMessage = cooldownMessage;
         this.actionbarCooldownMessage = actionbarCooldownMessage;
         this.forwardMultiplier = forwardMultiplier;
         this.verticalMultiplier = verticalMultiplier;
@@ -38,6 +40,7 @@ public class EnderBowConfig {
     public double getCooldownSeconds() { return cooldownSeconds; }
     public boolean isUnbreakable() { return unbreakable; }
     public double getVelocityMultiplier() { return velocityMultiplier; }
+    public String getCooldownMessage() { return cooldownMessage; }
     public boolean isActionbarCooldownMessage() { return actionbarCooldownMessage; }
     public double getForwardMultiplier() { return forwardMultiplier; }
     public double getVerticalMultiplier() { return verticalMultiplier; }
@@ -47,18 +50,21 @@ public class EnderBowConfig {
     public static class EffectsConfig {
         private final SoundConfig throwSound;
         private final ParticleConfig throwParticles;
+        private final ParticleConfig trailParticles;
         private final SoundConfig teleportSound;
         private final ParticleConfig teleportParticles;
 
-        public EffectsConfig(SoundConfig throwSound, ParticleConfig throwParticles, SoundConfig teleportSound, ParticleConfig teleportParticles) {
+        public EffectsConfig(SoundConfig throwSound, ParticleConfig throwParticles, ParticleConfig trailParticles, SoundConfig teleportSound, ParticleConfig teleportParticles) {
             this.throwSound = throwSound;
             this.throwParticles = throwParticles;
+            this.trailParticles = trailParticles;
             this.teleportSound = teleportSound;
             this.teleportParticles = teleportParticles;
         }
 
         public SoundConfig getThrowSound() { return throwSound; }
         public ParticleConfig getThrowParticles() { return throwParticles; }
+        public ParticleConfig getTrailParticles() { return trailParticles; }
         public SoundConfig getTeleportSound() { return teleportSound; }
         public ParticleConfig getTeleportParticles() { return teleportParticles; }
     }
@@ -89,14 +95,20 @@ public class EnderBowConfig {
         private final double offsetX;
         private final double offsetY;
         private final double offsetZ;
+        private final double speed;
 
         public ParticleConfig(boolean enabled, String particle, int count, double offsetX, double offsetY, double offsetZ) {
+            this(enabled, particle, count, offsetX, offsetY, offsetZ, 0.0);
+        }
+
+        public ParticleConfig(boolean enabled, String particle, int count, double offsetX, double offsetY, double offsetZ, double speed) {
             this.enabled = enabled;
             this.particle = particle;
             this.count = count;
             this.offsetX = offsetX;
             this.offsetY = offsetY;
             this.offsetZ = offsetZ;
+            this.speed = speed;
         }
 
         public boolean isEnabled() { return enabled; }
@@ -105,5 +117,6 @@ public class EnderBowConfig {
         public double getOffsetX() { return offsetX; }
         public double getOffsetY() { return offsetY; }
         public double getOffsetZ() { return offsetZ; }
+        public double getSpeed() { return speed; }
     }
 }

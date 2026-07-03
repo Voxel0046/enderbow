@@ -30,7 +30,6 @@ public final class EnderBowPlugin extends JavaPlugin {
 
         EnderBowCommand commandExecutor = new EnderBowCommand(this);
         getCommand("enderbow").setExecutor(commandExecutor);
-        getCommand("enderbow").setTabCompleter(commandExecutor);
 
         getLogger().info("EnderBow enabled");
     }
@@ -57,6 +56,7 @@ public final class EnderBowPlugin extends JavaPlugin {
             Math.max(0.0, cfg.getDouble("cooldown-seconds", 2.0)),
             cfg.getBoolean("unbreakable", true),
             Math.max(0.0, cfg.getDouble("velocity-multiplier", 1.0)),
+            ColorUtils.color(cfg.getString("cooldown-message", "&cEnderBow is on cooldown for %s seconds.")),
             cfg.getBoolean("actionbar-cooldown-message", true),
             Math.max(0.0, cfg.getDouble("forward-multiplier", 1.0)),
             Math.max(0.0, cfg.getDouble("vertical-multiplier", 1.0)),

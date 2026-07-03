@@ -17,7 +17,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
@@ -108,7 +107,8 @@ public class EnderBowListener implements Listener {
                     // still on cooldown: cancel the shot and optionally notify
                     event.setCancelled(true);
                     long remaining = (cooldownMillis - (now - last) + 999) / 1000;
-                    String msg = "§cEnderBow is on cooldown for " + remaining + "s.";
+                    String msg = plugin.getEbConfig().getCooldownMessage()
+                        .replace("%s", String.valueOf(remaining));
                     if (plugin.getEbConfig().isActionbarCooldownMessage()) {
                         // send as action bar
                         try {
