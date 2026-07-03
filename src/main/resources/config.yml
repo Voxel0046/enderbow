@@ -16,6 +16,9 @@ give-on-join: true
 # cooldown-seconds: per-player cooldown between uses (seconds, fractional allowed)
 cooldown-seconds: 2.0
 
+# cooldown-message: message shown when player is on cooldown (supports & color codes, %s = remaining seconds)
+cooldown-message: "&cEnderBow is on cooldown for %s seconds."
+
 # unbreakable: if true, the custom bow will not take durability damage
 unbreakable: true
 
@@ -52,6 +55,20 @@ effects:
     offset-x: 0.3
     offset-y: 0.3
     offset-z: 0.3
+  
+  # Enable particle effects on pearl in flight (trail)
+  trail-particles:
+    enabled: true
+    # Particle type (e.g., PURPLE_FLAME, DUST, FALLING_DUST)
+    particle: "PURPLE_FLAME"
+    # Number of particles to spawn per tick
+    count: 2
+    # Offset for particle spread
+    offset-x: 0.1
+    offset-y: 0.1
+    offset-z: 0.1
+    # Particle speed/velocity
+    speed: 0.0
   
   # Enable sound effects on pearl teleport/land
   teleport-sound:
