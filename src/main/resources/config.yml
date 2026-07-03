@@ -1,83 +1,42 @@
-# EnderBow configuration
-# name: display name of the custom bow (supports & color codes and #rrggbb hex codes)
 name: "&5Ender Bow"
-
-# lore: list of lore lines (supports & color codes and #rrggbb hex codes)
 lore:
   - "&7Shoot an ender pearl instead of an arrow"
   - "&eNo pearls required"
-
-# slot: hotbar slot where the bow will be placed (0-8)
 slot: 4
-
-# give-on-join: give the bow to players when they join
 give-on-join: true
-
-# cooldown-seconds: per-player cooldown between uses (seconds, fractional allowed)
 cooldown-seconds: 2.0
-
-# cooldown-message: message shown when player is on cooldown (supports & color codes, %s = remaining seconds)
 cooldown-message: "&cEnderBow is on cooldown for %s seconds."
-
-# unbreakable: if true, the custom bow will not take durability damage
 unbreakable: true
-
-# velocity-multiplier: multiplies the spawned ender pearl velocity (default 1.0)
 velocity-multiplier: 1.0
-
-# separate multipliers for forward (xz) and vertical (y) components
 forward-multiplier: 1.0
 vertical-multiplier: 1.0
-
-# actionbar-cooldown-message: if true, cooldown message will be sent as an action bar (fallbacks to chat if unsupported)
 actionbar-cooldown-message: true
-
-# Sound and particle effects on pearl throw
 effects:
-  # Enable sound effects on pearl throw
   throw-sound:
     enabled: true
-    # Sound name (e.g., ENTITY_ENDER_PEARL_THROW, ENTITY_ENDERMAN_TELEPORT)
     sound: "ENTITY_ENDER_PEARL_THROW"
-    # Volume (0.0 - max)
     volume: 1.0
-    # Pitch (0.5 - 2.0)
     pitch: 1.0
-  
-  # Enable particle effects on pearl throw
   throw-particles:
     enabled: true
-    # Particle type (e.g., PORTAL, SMALL_FLAME, FALLING_DUST)
     particle: "PORTAL"
-    # Number of particles to spawn
     count: 8
-    # Offset for particle spread
     offset-x: 0.3
     offset-y: 0.3
     offset-z: 0.3
-  
-  # Enable particle effects on pearl in flight (trail)
   trail-particles:
     enabled: true
-    # Particle type (e.g., PURPLE_FLAME, DUST, FALLING_DUST)
     particle: "PURPLE_FLAME"
-    # Number of particles to spawn per tick
     count: 2
-    # Offset for particle spread
     offset-x: 0.1
     offset-y: 0.1
     offset-z: 0.1
-    # Particle speed/velocity
     speed: 0.0
-  
-  # Enable sound effects on pearl teleport/land
   teleport-sound:
     enabled: true
     sound: "ENTITY_ENDERMAN_TELEPORT"
     volume: 1.0
     pitch: 1.0
-  
-  # Enable particle effects on pearl teleport/land
   teleport-particles:
     enabled: true
     particle: "PORTAL"
@@ -85,7 +44,5 @@ effects:
     offset-x: 0.5
     offset-y: 0.5
     offset-z: 0.5
-
-# bStats metrics reporting (anonymized data collection)
 metrics:
   enabled: true
