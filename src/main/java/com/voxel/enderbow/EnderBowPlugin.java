@@ -95,6 +95,18 @@ public final class EnderBowPlugin extends JavaPlugin {
                 throwParticlesEnabled, throwParticle, throwParticleCount, throwOffsetX, throwOffsetY, throwOffsetZ
             );
 
+            // Trail particles
+            boolean trailParticlesEnabled = cfg.getBoolean("effects.trail-particles.enabled", true);
+            String trailParticle = cfg.getString("effects.trail-particles.particle", "PURPLE_FLAME");
+            int trailParticleCount = cfg.getInt("effects.trail-particles.count", 2);
+            double trailOffsetX = cfg.getDouble("effects.trail-particles.offset-x", 0.1);
+            double trailOffsetY = cfg.getDouble("effects.trail-particles.offset-y", 0.1);
+            double trailOffsetZ = cfg.getDouble("effects.trail-particles.offset-z", 0.1);
+            double trailSpeed = cfg.getDouble("effects.trail-particles.speed", 0.0);
+            EnderBowConfig.ParticleConfig trailParticleConfig = new EnderBowConfig.ParticleConfig(
+                trailParticlesEnabled, trailParticle, trailParticleCount, trailOffsetX, trailOffsetY, trailOffsetZ, trailSpeed
+            );
+
             // Teleport sound
             boolean teleportSoundEnabled = cfg.getBoolean("effects.teleport-sound.enabled", true);
             String teleportSound = cfg.getString("effects.teleport-sound.sound", "ENTITY_ENDERMAN_TELEPORT");
@@ -115,7 +127,7 @@ public final class EnderBowPlugin extends JavaPlugin {
                 teleportParticlesEnabled, teleportParticle, teleportParticleCount, teleportOffsetX, teleportOffsetY, teleportOffsetZ
             );
 
-            return new EnderBowConfig.EffectsConfig(throwSoundConfig, throwParticleConfig, teleportSoundConfig, teleportParticleConfig);
+            return new EnderBowConfig.EffectsConfig(throwSoundConfig, throwParticleConfig, trailParticleConfig, teleportSoundConfig, teleportParticleConfig);
         } catch (Exception e) {
             getLogger().warning("Failed to parse effects configuration, using defaults");
             return createDefaultEffectsConfig();
@@ -125,9 +137,10 @@ public final class EnderBowPlugin extends JavaPlugin {
     private EnderBowConfig.EffectsConfig createDefaultEffectsConfig() {
         EnderBowConfig.SoundConfig throwSound = new EnderBowConfig.SoundConfig(true, "ENTITY_ENDER_PEARL_THROW", 1.0f, 1.0f);
         EnderBowConfig.ParticleConfig throwParticles = new EnderBowConfig.ParticleConfig(true, "PORTAL", 8, 0.3, 0.3, 0.3);
+        EnderBowConfig.ParticleConfig trailParticles = new EnderBowConfig.ParticleConfig(true, "PURPLE_FLAME", 2, 0.1, 0.1, 0.1, 0.0);
         EnderBowConfig.SoundConfig teleportSound = new EnderBowConfig.SoundConfig(true, "ENTITY_ENDERMAN_TELEPORT", 1.0f, 1.0f);
         EnderBowConfig.ParticleConfig teleportParticles = new EnderBowConfig.ParticleConfig(true, "PORTAL", 16, 0.5, 0.5, 0.5);
-        return new EnderBowConfig.EffectsConfig(throwSound, throwParticles, teleportSound, teleportParticles);
+        return new EnderBowConfig.EffectsConfig(throwSound, throwParticles, trailParticles, teleportSound, teleportParticles);
     }
 
     private void setupMetrics() {
