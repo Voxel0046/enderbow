@@ -18,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class EnderBowListener implements Listener {
     private final NamespacedKey key;
     private final Map<UUID, Long> cooldowns = new ConcurrentHashMap<>();
     private final Map<Integer, UUID> pearls = new ConcurrentHashMap<>(); // Track pearl entity IDs to their shooter
+    private final Map<Integer, BukkitTask> pearlTrails = new ConcurrentHashMap<>(); // Track particle trail tasks
 
     public EnderBowListener(EnderBowPlugin plugin) {
         this.plugin = plugin;
@@ -151,6 +153,9 @@ public class EnderBowListener implements Listener {
 
         // Play throw effects
         playThrowEffects(player);
+        
+        // Start particle trail for the pearl
+        startPearlTrail(pearl);
 
         // cancel original shoot event to avoid arrow consumption visuals
         event.setCancelled(true);
@@ -161,13 +166,67 @@ public class EnderBowListener implements Listener {
         if (!(event.getEntity() instanceof EnderPearl)) return;
 
         EnderPearl pearl = (EnderPearl) event.getEntity();
-        UUID shooterUUID = pearls.remove(pearl.getEntityId());
+        int entityId = pearl.getEntityId();
+        
+        UUID shooterUUID = pearls.remove(entityId);
+        
+        // Cancel the particle trail task
+        BukkitTask task = pearlTrails.remove(entityId);
+        if (task != null) {
+            task.cancel();
+        }
 
         if (shooterUUID != null) {
             Player shooter = org.bukkit.Bukkit.getPlayer(shooterUUID);
             if (shooter != null) {
                 playTeleportEffects(pearl.getLocation());
             }
+        }
+    }
+
+    private void startPearlTrail(EnderPearl pearl) {
+        EnderBowConfig cfg = plugin.getEbConfig();
+        EnderBowConfig.EffectsConfig effects = cfg.getEffectsConfig();
+        
+        // Check if trail particles are enabled
+        if (!effects.getTrailParticles().isEnabled()) {
+            return;
+        }
+        
+        int entityId = pearl.getEntityId();
+        
+        try {
+            Particle particle = Particle.valueOf(effects.getTrailParticles().getParticle());
+            
+            BukkitTask task = org.bukkit.Bukkit.getScheduler().scheduleSyncRepeatingTask(
+                plugin,
+                () -> {
+                    if (pearl.isDead()) {
+                        // Pearl is gone, cancel this task
+                        BukkitTask t = pearlTrails.remove(entityId);
+                        if (t != null) {
+                            t.cancel();
+                        }
+                    } else {
+                        // Spawn particles at pearl location
+                        pearl.getWorld().spawnParticle(
+                            particle,
+                            pearl.getLocation(),
+                            effects.getTrailParticles().getCount(),
+                            effects.getTrailParticles().getOffsetX(),
+                            effects.getTrailParticles().getOffsetY(),
+                            effects.getTrailParticles().getOffsetZ(),
+                            effects.getTrailParticles().getSpeed()
+                        );
+                    }
+                },
+                0,
+                1 // Run every tick
+            );
+            
+            pearlTrails.put(entityId, task);
+        } catch (IllegalArgumentException e) {
+            plugin.getLogger().warning("Invalid trail particle: " + effects.getTrailParticles().getParticle());
         }
     }
 
